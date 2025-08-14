@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elfie Design Thinking Facilitator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Elfie Design System Inspired Colors */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7f7fc;
+            --bg-tertiary: #e7e8f0;
+            --text-primary: #14142b;
+            --text-secondary: #555580;
+            --brand: #ff0283;
+            --brand-hover: #ff47ac;
+            --border-color: #d8d9e8;
+        }
+        .dark {
+             --bg-primary: #14142b;
+            --bg-secondary: #292845;
+            --bg-tertiary: #373657;
+            --text-primary: #e7e8f0;
+            --text-secondary: #9799bf;
+            --border-color: #555580;
+        }
+        .sidebar-icon {
+            transition: all 0.2s ease-in-out;
+        }
+        .sidebar-item.active .sidebar-icon {
+            background-color: var(--brand);
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(255, 2, 131, 0.3);
+        }
+        .sidebar-item.active .sidebar-text {
+            color: var(--brand);
+            font-weight: 600;
+        }
+        .guidance-tab.active {
+            background-color: var(--bg-primary);
+            color: var(--brand);
+            border-bottom: 2px solid var(--brand);
+        }
+        .guidance-tab {
+            border-bottom: 2px solid transparent;
+        }
+        .workspace {
+            min-height: calc(100vh - 150px);
+        }
+        .sticky-note {
+            min-width: 150px;
+            min-height: 100px;
+            touch-action: none;
+            user-select: none;
+        }
+        .draggable:hover {
+            cursor: grab;
+        }
+        .draggable:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body class="bg-[var(--bg-secondary)] text-[var(--text-primary)]">
+    <div id="app" class="flex flex-col h-screen">
+        <header class="bg-[var(--bg-primary)] border-b border-[var(--border-color)] px-4 md:px-6 py-3 flex items-center justify-between shadow-sm">
+            <h1 class="text-lg md:text-xl font-bold text-[var(--text-primary)]">Design Thinking Facilitator</h1>
+            <div class="flex items-center space-x-3">
+            
+                <button class="bg-gray-200 text-gray-600 hover:bg-gray-300 w-8 h-8 rounded-full flex items-center justify-center text-lg">+</button>
+            </div>
+        </header>
+
+        <div class="flex flex-1 overflow-hidden">
+            <nav class="bg-[var(--bg-primary)] w-16 md:w-56 p-2 md:p-4 space-y-2 border-r border-[var(--border-color)] transition-all duration-300">
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)]" data-stage="empathize">
+                    <div class="sidebar-icon h-10 w-10 min-w-[40px] rounded-lg flex items-center justify-center bg-[var(--bg-tertiary)] text-[var(--text-secondary)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    </div>
+                    <span class="sidebar-text hidden md:inline text-[var(--text-secondary)] font-medium">Empathize</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)]" data-stage="define">
+                    <div class="sidebar-icon h-10 w-10 min-w-[40px] rounded-lg flex items-center justify-center bg-[var(--bg-tertiary)] text-[var(--text-secondary)]">
+                       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" /></svg>
+                    </div>
+                    <span class="sidebar-text hidden md:inline text-[var(--text-secondary)] font-medium">Define</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)]" data-stage="ideate">
+                    <div class="sidebar-icon h-10 w-10 min-w-[40px] rounded-lg flex items-center justify-center bg-[var(--bg-tertiary)] text-[var(--text-secondary)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                    </div>
+                    <span class="sidebar-text hidden md:inline text-[var(--text-secondary)] font-medium">Ideate</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)]" data-stage="prototype">
+                    <div class="sidebar-icon h-10 w-10 min-w-[40px] rounded-lg flex items-center justify-center bg-[var(--bg-tertiary)] text-[var(--text-secondary)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                    </div>
+                    <span class="sidebar-text hidden md:inline text-[var(--text-secondary)] font-medium">Prototype</span>
+                </a>
+                <a href="#" class="sidebar-item flex items-center space-x-3 p-3 rounded-lg hover:bg-[var(--bg-secondary)]" data-stage="test">
+                    <div class="sidebar-icon h-10 w-10 min-w-[40px] rounded-lg flex items-center justify-center bg-[var(--bg-tertiary)] text-[var(--text-secondary)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <span class="sidebar-text hidden md:inline text-[var(--text-secondary)] font-medium">Test</span>
+                </a>
+            </nav>
+
+            <main class="flex-1 flex flex-col overflow-hidden">
+                <div id="stage-content" class="flex-1 overflow-y-auto p-4 md:p-6">
+                    </div>
+            </main>
+        </div>
+    </div>
+
+    <template id="empathize-template">
+        <div class="flex flex-col lg:flex-row gap-6">
+            <div class="flex-1">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold text-[var(--text-primary)]">Stage 1: Empathize</h2>
+                    <p class="text-[var(--text-secondary)]">Goal: Gain a profound, empathetic understanding of the people for whom you are designing.</p>
+                </div>
+                <div class="workspace bg-[var(--bg-primary)] rounded-xl shadow-sm p-4 relative border border-[var(--border-color)]">
+                    <h3 class="text-lg font-semibold mb-3">Your Workspace: Empathy Map</h3>
+                    <div class="grid grid-cols-2 grid-rows-2 gap-4 h-full min-h-[500px]">
+                        <div class="bg-[var(--bg-secondary)] rounded-lg p-3 border border-[var(--border-color)] relative"><span class="font-bold absolute top-2 left-3">SAYS</span></div>
+                        <div class="bg-[var(--bg-secondary)] rounded-lg p-3 border border-[var(--border-color)] relative"><span class="font-bold absolute top-2 left-3">THINKS</span></div>
+                        <div class="bg-[var(--bg-secondary)] rounded-lg p-3 border border-[var(--border-color)] relative"><span class="font-bold absolute top-2 left-3">DOES</span></div>
+                        <div class="bg-[var(--bg-secondary)] rounded-lg p-3 border border-[var(--border-color)] relative"><span class="font-bold absolute top-2 left-3">FEELS</span></div>
+                        
+                    </div>
+                    <br>
+                    <div class="aspect-w-1 aspect-h-1 bg-white rounded flex items-center justify-center">
+                        <img src="https://www.hrbartender.com/wp-content/uploads/2020/06/Empathy-Map-for-Customers-and-Employees.png" alt="An empathy map for a newly diagnosed diabetes patient, showing their thoughts, feelings, and actions." class="max-w-full max-h-full object-contain">
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-80 xl:w-96 bg-[var(--bg-primary)] rounded-xl shadow-sm border border-[var(--border-color)]">
+                <div class="guidance-panel" data-stage="empathize">
+                    <div class="flex border-b border-[var(--border-color)]">
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="guide">Guide</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="tools">Tools</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="examples">Examples</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="tips">Tips</button>
+                    </div>
+                    <div class="guidance-content p-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+                        <div data-tab-content="guide">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">How to Empathize</h4>
+                            <p>Immerse yourself in the user's world. Your goal is to understand their experiences, motivations, and pain points. Set aside your own assumptions to see the world from their perspective.</p>
+                            <ol class="list-decimal list-inside mt-2 space-y-1">
+                                <li><strong>Observe:</strong> Watch users in their natural environment.</li>
+                                <li><strong>Engage:</strong> Conduct interviews to hear their stories.</li>
+                                <li><strong>Immerse:</strong> Experience what your user experiences.</li>
+                            </ol>
+                        </div>
+                        <div data-tab-content="tools" class="hidden">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">Tool: Empathy Interviews</h4>
+                            <p>These are not standard Q&A sessions. The goal is to uncover deeper needs by encouraging rich, narrative responses. Ask open-ended questions and encourage storytelling.</p>
+                        </div>
+                        <div data-tab-content="examples" class="hidden">
+                           <h4 class="font-bold text-[var(--text-primary)] mb-2">Example: What/How/Why</h4>
+                           <p>A simple method for structuring observations:</p>
+                           <ul class="list-disc list-inside mt-2">
+                               <li><strong>What?</strong> "The user is creating a spreadsheet."</li>
+                               <li><strong>How?</strong> "They are manually entering receipts."</li>
+                               <li><strong>Why?</strong> "They seem anxious about their budget." (Inference)</li>
+                           </ul>
+                        </div>
+                        <div data-tab-content="tips" class="hidden">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">Pro Tips</h4>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><strong>Ask "Why?" repeatedly</strong> to uncover deeper motivations.</li>
+                                <li><strong>Embrace silence.</strong> It gives the user time to reflect and often leads to more thoughtful answers.</li>
+                                <li><strong>Pay attention to non-verbal cues.</strong> Body language can communicate more than words.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <template id="define-template">
+        <div class="flex flex-col lg:flex-row gap-6">
+            <div class="flex-1">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold text-[var(--text-primary)]">Stage 2: Define</h2>
+                    <p class="text-[var(--text-secondary)]">Goal: Synthesize your findings into a clear, actionable problem statement.</p>
+                </div>
+                <div class="workspace bg-[var(--bg-primary)] rounded-xl shadow-sm p-4 relative border border-[var(--border-color)]">
+                    <h3 class="text-lg font-semibold mb-3">Your Workspace: Affinity Map & Problem Statement</h3>
+                    
+                    <div class="bg-[var(--bg-secondary)] p-4 rounded-lg min-h-[300px] mb-4 border border-[var(--border-color)]">
+                        </div>
+                    <div>
+                        <h4 class="font-semibold mb-2">Problem Statement</h4>
+                        <div class="bg-[var(--bg-secondary)] p-4 rounded-lg border border-[var(--border-color)]">
+                            <p class="text-[var(--text-secondary)]">
+                                [<span contenteditable="true" class="text-[var(--text-primary)] font-semibold outline-none focus:ring-2 focus:ring-[var(--brand)] rounded px-1">A newly diagnosed Type 2 diabetes patient</span>] needs [<span contenteditable="true" class="text-[var(--text-primary)] font-semibold outline-none focus:ring-2 focus:ring-[var(--brand)] rounded px-1">a simple way to understand how food affects their blood sugar</span>] because [<span contenteditable="true" class="text-[var(--text-primary)] font-semibold outline-none focus:ring-2 focus:ring-[var(--brand)] rounded px-1">they feel overwhelmed and anxious about managing their condition</span>].
+                            </p>
+                             <p class="text-xs text-gray-400 mt-1">(User) (Insight)
+                            </p>
+                        </div>
+                        <br>
+                        <div class="aspect-w-1 aspect-h-1 bg-white rounded flex items-center justify-center">
+                            <img src="https://www.datocms-assets.com/38511/1706525401-affinity-diagram-step-4.png" alt="An affinity map with colorful sticky notes clustering user research for a health app." class="max-w-full max-h-full object-contain">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-80 xl:w-96 bg-[var(--bg-primary)] rounded-xl shadow-sm border border-[var(--border-color)]">
+                <div class="guidance-panel" data-stage="define">
+                    <div class="flex border-b border-[var(--border-color)]">
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="guide">Guide</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="tools">Tools</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="examples">Examples</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="tips">Tips</button>
+                    </div>
+                    <div class="guidance-content p-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+                        <div data-tab-content="guide">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">How to Define</h4>
+                            <p>This is where you synthesize your research. Analyze your observations and organize them into a clear, human-centered problem statement that will be your guiding "North Star."</p>
+                        </div>
+                        <div data-tab-content="tools" class="hidden">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">Tool: "How Might We" Questions</h4>
+                            <p>Once your problem statement is set, reframe it into one or more "How Might We" questions. This transforms the challenge into an open-ended, optimistic prompt for ideation.</p>
+                        </div>
+                        <div data-tab-content="examples" class="hidden">
+                           <h4 class="font-bold text-[var(--text-primary)] mb-2">Example: Strong vs. Weak HMW</h4>
+                           <ul class="list-disc list-inside mt-2 space-y-1">
+                               <li><strong>Weak:</strong> "How might we create an app?" (Suggests a solution)</li>
+                               <li><strong>Strong:</strong> "How might we help patients feel less anxious about their blood sugar readings?" (Opens possibilities)</li>
+                           </ul>
+                        </div>
+                        <div data-tab-content="tips" class="hidden">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">Pro Tips</h4>
+                            <p>A strong problem statement clearly articulates:
+                            <ol class="list-decimal list-inside mt-2 space-y-1">
+                                <li>Who has the problem? (The user)</li>
+                                <li>What is their need? (The core problem)</li>
+                                <li>Why is it important to solve? (The insight)</li>
+                            </ol>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <template id="ideate-template">
+        <div class="flex flex-col lg:flex-row gap-6">
+            <div class="flex-1">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold text-[var(--text-primary)]">Stage 3: Ideate</h2>
+                    <p class="text-[var(--text-secondary)]">Goal: Generate a vast quantity and diversity of potential solutions.</p>
+                </div>
+                <div class="workspace bg-[var(--bg-primary)] rounded-xl shadow-sm p-4 relative border border-[var(--border-color)]">
+                    <h3 class="text-lg font-semibold mb-3">Your Workspace: Idea Generation</h3>
+                    <p class="text-center font-semibold text-lg mb-4">How might we help patients feel less anxious about their blood sugar readings?</p>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div class="aspect-square bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] flex items-center justify-center p-2">
+                            <textarea class="w-full h-full bg-transparent text-center text-sm outline-none resize-none" placeholder="Gamified glucose logging with points"></textarea>
+                        </div>
+                        <div class="aspect-square bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] flex items-center justify-center p-2">
+                            <textarea class="w-full h-full bg-transparent text-center text-sm outline-none resize-none" placeholder="AI-powered meal photo analysis for carb counting"></textarea>
+                        </div>
+                        <div class="aspect-square bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] flex items-center justify-center p-2">
+                            <textarea class="w-full h-full bg-transparent text-center text-sm outline-none resize-none" placeholder="A 'buddy system' to share progress with a friend"></textarea>
+                        </div>
+                        <div class="aspect-square bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] flex items-center justify-center p-2">
+                            <textarea class="w-full h-full bg-transparent text-center text-sm outline-none resize-none" placeholder="Visual trend graphs instead of just numbers"></textarea>
+                        </div>
+                        <div class="aspect-square bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] flex items-center justify-center p-2">
+                            <textarea class="w-full h-full bg-transparent text-center text-sm outline-none resize-none" placeholder="Daily motivational quotes from doctors"></textarea>
+                        </div>
+                        <div class="aspect-square bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] flex items-center justify-center p-2">
+                            <textarea class="w-full h-full bg-transparent text-center text-sm outline-none resize-none" placeholder="Medication reminder with customizable tones"></textarea>
+                        </div>
+                        <div class="aspect-square bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] flex items-center justify-center p-2">
+                            <textarea class="w-full h-full bg-transparent text-center text-sm outline-none resize-none" placeholder="Integration with smartwatch for activity tracking"></textarea>
+                        </div>
+                        <div class="aspect-square bg-[var(--bg-secondary)] rounded-lg border border-[var(--border-color)] flex items-center justify-center p-2">
+                            <textarea class="w-full h-full bg-transparent text-center text-sm outline-none resize-none" placeholder="Recipe library with pre-calculated nutritional info"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-80 xl:w-96 bg-[var(--bg-primary)] rounded-xl shadow-sm border border-[var(--border-color)]">
+                <div class="guidance-panel" data-stage="ideate">
+                    <div class="flex border-b border-[var(--border-color)]">
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="guide">Guide</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="tools">Tools</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="examples">Examples</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="tips">Tips</button>
+                    </div>
+                    <div class="guidance-content p-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+                        <div data-tab-content="guide">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">How to Ideate</h4>
+                            <p>This is a judgment-free zone. The goal is "going wide" to generate as many ideas as possible. Quantity over quality is the mantra here, as a larger pool of ideas increases the likelihood of finding a breakthrough.</p>
+                        </div>
+                        <div data-tab-content="tools" class="hidden">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">Tool: Crazy 8s</h4>
+                            <p>A fast-paced sketching exercise. Each person takes 8 minutes to sketch 8 distinct ideas, one idea per minute. The focus is on speed and quantity, not artistic quality.</p>
+                        </div>
+                        <div data-tab-content="examples" class="hidden">
+                           <h4 class="font-bold text-[var(--text-primary)] mb-2">Example: Worst Possible Idea</h4>
+                           <p>To break creative blocks, flip the prompt. Ask the team to generate the absolute worst solutions to the problem. This playful approach often surfaces hidden assumptions and can be reverse-engineered into good ideas.</p>
+                        </div>
+                        <div data-tab-content="tips" class="hidden">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">Pro Tips</h4>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><strong>Defer judgment.</strong> No criticism is allowed. This creates a safe space for wild ideas.</li>
+                                <li><strong>Build on the ideas of others.</strong> Use phrases like "Yes, and..." instead of "No, but..." to foster collaborative creativity.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <template id="prototype-template">
+        <div class="flex flex-col lg:flex-row gap-6">
+            <div class="flex-1">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold text-[var(--text-primary)]">Stage 4: Prototype</h2>
+                    <p class="text-[var(--text-secondary)]">Goal: Transform abstract concepts into tangible artifacts to test your assumptions.</p>
+                </div>
+                <div class="workspace bg-[var(--bg-primary)] rounded-xl shadow-sm p-4 relative border border-[var(--border-color)]">
+                    <h3 class="text-lg font-semibold mb-3">Your Workspace: Sketches & Storyboards</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-[var(--bg-secondary)] rounded-lg p-3 border border-[var(--border-color)]">
+                            <h4 class="font-semibold mb-2">Paper Prototype Sketch</h4>
+                            <div class="aspect-w-1 aspect-h-1 bg-white rounded flex items-center justify-center">
+                                <img src="https://www.martha-eierdanz.com/media/pages/paper-prototyping-in-practice/edbb413ca8-1750084229/flows_compressed.png" alt="An affinity map with colorful sticky notes clustering user research for a health app." class="max-w-full max-h-full object-contain">
+                            </div>
+                        </div>
+                        <div class="bg-[var(--bg-secondary)] rounded-lg p-3 border border-[var(--border-color)]">
+                            <h4 class="font-semibold mb-2">User Journey Storyboard</h4>
+                            <div class="aspect-w-1 aspect-h-1 bg-white rounded flex items-center justify-center">
+                                <img src="https://blogs.city.ac.uk/sayici-inm452-2016/files/2016/12/ID_FutureUserJourneys-1gntqn4.png" alt="An affinity map with colorful sticky notes clustering user research for a health app." class="max-w-full max-h-full object-contain">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-80 xl:w-96 bg-[var(--bg-primary)] rounded-xl shadow-sm border border-[var(--border-color)]">
+                <div class="guidance-panel" data-stage="prototype">
+                    <div class="flex border-b border-[var(--border-color)]">
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="guide">Guide</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="tools">Tools</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="examples">Examples</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="tips">Tips</button>
+                    </div>
+                    <div class="guidance-content p-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+                        <div data-tab-content="guide">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">The Philosophy of Prototyping</h4>
+                            <p>Prototyping is "thinking by doing." The goal is not to create a finished product, but to build low-cost, scaled-down versions of solutions to learn, test assumptions, and better understand the problem.</p>
+                        </div>
+                        <div data-tab-content="tools" class="hidden">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">Tool: Storyboarding</h4>
+                            <p>Create a comic-strip-like sequence of drawings to visualize how a user would interact with a service or product over time. This helps to test the flow and narrative of an experience.</p>
+                        </div>
+                        <div data-tab-content="examples" class="hidden">
+                           <h4 class="font-bold text-[var(--text-primary)] mb-2">Example: Role-Playing</h4>
+                           <p>Physically act out a service experience. For example, team members might play the roles of a patient and a virtual health coach to test a new app feature. This is excellent for uncovering issues in service design.</p>
+                        </div>
+                        <div data-tab-content="tips" class="hidden">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">Pro Tips</h4>
+                            <p>A low-fidelity prototype (like one made of paper) often gets more honest, critical feedback because users don't worry about hurting the designer's feelings. Keep it rough!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    
+    <template id="test-template">
+        <div class="flex flex-col lg:flex-row gap-6">
+            <div class="flex-1">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold text-[var(--text-primary)]">Stage 5: Test</h2>
+                    <p class="text-[var(--text-secondary)]">Goal: Gather feedback on your prototypes to refine solutions and deepen your understanding.</p>
+                </div>
+                <div class="workspace bg-[var(--bg-primary)] rounded-xl shadow-sm p-4 relative border border-[var(--border-color)]">
+                    <h3 class="text-lg font-semibold mb-3">Your Workspace: User Feedback Grid</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-green-50 border-green-200 border rounded-lg p-3">
+                            <h4 class="font-bold text-green-800 mb-2">LIKES 👍</h4>
+                            <textarea class="w-full h-40 bg-transparent outline-none resize-none text-sm" placeholder="e.g., 'I love how the graph shows my glucose trend clearly.'&#10;'The colors are calming and not alarming.'"></textarea>
+                        </div>
+                        <div class="bg-red-50 border-red-200 border rounded-lg p-3">
+                            <h4 class="font-bold text-red-800 mb-2">CRITICISM 👎</h4>
+                            <textarea class="w-full h-40 bg-transparent outline-none resize-none text-sm" placeholder="e.g., 'I couldn't figure out how to log my insulin dose.'&#10;'The food library is missing a lot of common items.'"></textarea>
+                        </div>
+                        <div class="bg-blue-50 border-blue-200 border rounded-lg p-3">
+                            <h4 class="font-bold text-blue-800 mb-2">IDEAS 💡</h4>
+                            <textarea class="w-full h-40 bg-transparent outline-none resize-none text-sm" placeholder="e.g., 'Could you add a barcode scanner for food logging?'&#10;'What if it could connect to my smart watch?'"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-80 xl:w-96 bg-[var(--bg-primary)] rounded-xl shadow-sm border border-[var(--border-color)]">
+                <div class="guidance-panel" data-stage="test">
+                    <div class="flex border-b border-[var(--border-color)]">
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="guide">Guide</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="tools">Tools</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="examples">Examples</button>
+                        <button class="guidance-tab flex-1 p-3 font-semibold text-sm text-[var(--text-secondary)]" data-tab="tips">Tips</button>
+                    </div>
+                    <div class="guidance-content p-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+                        <div data-tab-content="guide">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">The Iterative Loop</h4>
+                            <p>Testing is not a final validation gate but an integral part of an ongoing learning loop. The insights generated here frequently feed back into earlier stages of the process. Be prepared to go back to Define or Ideate.</p>
+                        </div>
+                        <div data-tab-content="tools" class="hidden">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">Tool: Think Aloud Protocol</h4>
+                            <p>Encourage users to "think aloud" as they interact with the prototype. Ask them to verbalize their thoughts, expectations, and feelings. This reveals their mental model and sources of confusion.</p>
+                        </div>
+                        <div data-tab-content="examples" class="hidden">
+                           <h4 class="font-bold text-[var(--text-primary)] mb-2">Example: Follow-Up Questions</h4>
+                           <p>When a user makes a comment, probe for deeper meaning. Use open-ended questions like:</p>
+                           <ul class="list-disc list-inside mt-2">
+                               <li>"What did you expect to happen there?"</li>
+                               <li>"Can you tell me more about why that felt frustrating?"</li>
+                           </ul>
+                        </div>
+                        <div data-tab-content="tips" class="hidden">
+                            <h4 class="font-bold text-[var(--text-primary)] mb-2">Pro Tips</h4>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li><strong>Show, don't tell.</strong> Let the user experience the prototype with as little upfront explanation as possible.</li>
+                                <li><strong>Embrace negative feedback.</strong> Criticism is not failure; it's a gift that provides a clear path for improvement.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const stageContainer = document.getElementById('stage-content');
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            
+            const stickyNoteExamples = {
+                empathize: [
+                    "SAYS: 'I have no idea what I'm supposed to eat now.'",
+                    "SAYS: 'What does HbA1c even mean? My doctor said the word but didn't explain it.'",
+                    "SAYS: 'I'm just so tired of pricking my finger.'",
+                    "THINKS: 'I feel like a failure every time my sugar level is high.'",
+                    "THINKS: 'I don't want to be a burden on my family. I should handle this myself.'",
+                    "THINKS: 'Will I ever feel normal again?'",
+                    "DOES: Keeps a messy, handwritten log of blood sugar readings in a notebook.",
+                    "DOES: Avoids social events centered around food out of fear and uncertainty.",
+                    "DOES: Spends hours Googling conflicting information about diabetic diets.",
+                    "FEELS: Overwhelmed by the sheer amount of information and tasks.",
+                    "FEELS: Anxious about the long-term complications.",
+                    "FEELS: Isolated, like no one understands what they're going through."
+                ],
+                define: [
+                    "Quote: 'I wish I knew if what I'm doing is actually working.'",
+                    "Pain Point: Carb counting is confusing and tedious.",
+                    "Observation: User's notebook for tracking is disorganized and hard to read.",
+                    "Need: A way to see progress over time, not just daily numbers.",
+                    "Insight: Fear of judgment prevents users from sharing their numbers.",
+                    "Challenge: Forgetting to take medication on a busy schedule is common."
+                ]
+            };
+
+            // --- Navigation Logic ---
+            function navigateToStage(stageId) {
+                // Update sidebar active state
+                sidebarItems.forEach(item => {
+                    item.classList.toggle('active', item.dataset.stage === stageId);
+                });
+
+                // Load stage content
+                const template = document.getElementById(`${stageId}-template`);
+                if (template) {
+                    stageContainer.innerHTML = '';
+                    const clone = template.content.cloneNode(true);
+                    stageContainer.appendChild(clone);
+                    
+                    // Re-initialize event listeners for the new content
+                    initializeGuidanceTabs(stageId);
+                    initializeWorkspace(stageId);
+                }
+            }
+
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const stageId = e.currentTarget.dataset.stage;
+                    navigateToStage(stageId);
+                });
+            });
+
+            // --- Guidance Panel Tabs Logic ---
+            function initializeGuidanceTabs(stageId) {
+                const guidancePanel = document.querySelector(`.guidance-panel[data-stage="${stageId}"]`);
+                if (!guidancePanel) return;
+
+                const tabs = guidancePanel.querySelectorAll('.guidance-tab');
+                const contents = guidancePanel.querySelectorAll('[data-tab-content]');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        // Deactivate all
+                        tabs.forEach(t => t.classList.remove('active'));
+                        contents.forEach(c => c.classList.add('hidden'));
+
+                        // Activate clicked tab
+                        tab.classList.add('active');
+                        const contentId = tab.dataset.tab;
+                        const activeContent = guidancePanel.querySelector(`[data-tab-content="${contentId}"]`);
+                        if (activeContent) {
+                            activeContent.classList.remove('hidden');
+                        }
+                    });
+                });
+                // Activate the first tab by default
+                if (tabs.length > 0) {
+                    tabs[0].click();
+                }
+            }
+            
+            // --- Workspace Interactivity ---
+             function initializeWorkspace(stageId) {
+                if (stageId === 'define' || stageId === 'empathize') {
+                    const addStickyButton = document.getElementById(`add-sticky-${stageId}`);
+                    const workspace = document.querySelector(`#${stageId}-template .workspace`);
+                    const dropzone = workspace.querySelector('.grid, .bg-\\[var\\(--bg-secondary\\)\\]');
+
+
+                    if (addStickyButton && dropzone) {
+                        addStickyButton.addEventListener('click', () => {
+                            const examples = stickyNoteExamples[stageId] || [];
+                            const randomExample = examples[Math.floor(Math.random() * examples.length)] || 'Type here...';
+                            createStickyNote(dropzone, randomExample);
+                        });
+                        
+                        // Add some initial example notes
+                        const examples = stickyNoteExamples[stageId] || [];
+                        for(let i=0; i<3; i++){
+                             const randomExample = examples[i % examples.length];
+                             createStickyNote(dropzone, randomExample);
+                        }
+                    }
+                }
+            }
+
+            function createStickyNote(container, text = 'Type here...') {
+                const note = document.createElement('div');
+                note.className = 'sticky-note draggable absolute bg-yellow-200 p-4 rounded-lg shadow-md flex items-center justify-center border border-yellow-300';
+                
+                // Ensure notes are within the container bounds
+                const containerRect = container.getBoundingClientRect();
+                const noteWidth = 150;
+                const noteHeight = 100;
+                const x = Math.random() * (containerRect.width - noteWidth);
+                const y = Math.random() * (containerRect.height - noteHeight);
+
+                note.style.left = `${x}px`;
+                note.style.top = `${y}px`;
+                
+                const textarea = document.createElement('textarea');
+                textarea.className = 'w-full h-full bg-transparent text-sm text-gray-800 outline-none resize-none text-center';
+                textarea.value = text;
+                
+                note.appendChild(textarea);
+                container.appendChild(note);
+            }
+
+            // --- InteractJS for Dragging ---
+            interact('.draggable').draggable({
+                inertia: true,
+                modifiers: [
+                    interact.modifiers.restrictRect({
+                        restriction: 'parent',
+                        endOnly: true
+                    })
+                ],
+                autoScroll: true,
+                listeners: {
+                    move: dragMoveListener,
+                }
+            });
+
+            function dragMoveListener(event) {
+                var target = event.target
+                var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+                var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+                target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+
+                target.setAttribute('data-x', x)
+                target.setAttribute('data-y', y)
+            }
+
+
+            // --- Initial Load ---
+            navigateToStage('empathize');
+        });
+    </script>
+</body>
+</html>
